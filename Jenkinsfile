@@ -15,12 +15,12 @@ node(''){
     }
 
     stage('Build'){
-        docker.build(imageName)
+        docker.build(myimageName)
     }
 
     stage('Push'){
         docker.withRegistry([ credentialsId: "dockerhub", url: "" ]) {
-            docker.image(imageName).push(commitID())
+            docker.image(myimageName).push(commitID())
 
             if (env.BRANCH_NAME == 'develop') {
                 docker.image(imageName).push('develop')
