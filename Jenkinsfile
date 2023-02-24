@@ -24,7 +24,7 @@ node(''){
 
     stage('Push'){
         withDockerRegistry([credentialsId: "dockerhub", url: "" ]) {
-        dockerImage.push()}
+        dockerImage.push(commitID())}
     }
 
 
