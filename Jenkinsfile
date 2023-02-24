@@ -2,7 +2,7 @@ def imageName = 'mlabouardy/movies-loader'
 def myimageName = 'monarene/movie-loader'
 
 environment {
-		DOCKERHUB_CREDENTIALS = credentials('dockerhub-cred-raja')
+		DOCKERHUB_CREDENTIALS = credentials('dockerhub')
 	}
 
 node(''){ 
