@@ -42,6 +42,7 @@ def commitID() {
     commitID
 }
 
+// Example for pushing to docker
 // stage('Push image') {
 //     withCredentials([usernamePassword( credentialsId: 'docker-hub-credentials', usernameVariable: 'USER', passwordVariable: 'PASSWORD')]) {
 //         def registry_url = "registry.hub.docker.com/"
