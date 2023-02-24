@@ -19,11 +19,12 @@ node(''){
     }
 
     stage('Build'){
-        docker.build(myimageName)
+        dockerImage = docker.build(myimageName)
     }
 
     stage('Push'){
-        sh 'echo $DOCKERHUB_CREDENTIALS_USR $DOCKERHUB_CREDENTIALS_PSW'
+        withDockerRegistry([credentialsId: "dockerhub", url: "" ]) {
+        dockerImage.push()}
     }
 
 
