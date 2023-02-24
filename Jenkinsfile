@@ -1,6 +1,10 @@
 def imageName = 'mlabouardy/movies-loader'
 def myimageName = 'monarene/movie-loader'
 
+environment {
+		DOCKERHUB_CREDENTIALS = credentials('dockerhub-cred-raja')
+	}
+
 node(''){ 
     
     stage('Checkout'){
@@ -19,13 +23,7 @@ node(''){
     }
 
     stage('Push'){
-        docker.withRegistry([ credentialsId: "dockerhub", url: "" ]) {
-            docker.image(myimageName).push(commitID())
-
-            if (env.BRANCH_NAME == 'develop') {
-                docker.image(imageName).push('develop')
-            }
-        }
+        sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
     }
 
 
