@@ -25,6 +25,10 @@ node(''){
     stage('Push'){
         withDockerRegistry([credentialsId: "dockerhub", url: "" ]) {
         dockerImage.push(commitID())}
+
+        if (env.BRANCH_NAME == 'develop') {
+            dockerImage.push('develop')
+        }
     }
 
 
