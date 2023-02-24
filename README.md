@@ -1,2 +1,2 @@
-[![Build Status](http://18.221.180.115:8080/job/watchlist/job/movie-loader/job/develop/badge/icon)](http://18.221.180.115:8080/job/watchlist/job/movie-loader/job/develop/)
+[![Build Status](http://18.221.180.115:8080/job/watchlist/job/movie-loader/job/feat%252Fjenksin-check/badge/icon)](http://18.221.180.115:8080/job/watchlist/job/movie-loader/job/feat%252Fjenksin-check/)
 ## Test webhook
