@@ -22,15 +22,18 @@ node(''){
 
     stage('Push'){
         withDockerRegistry([credentialsId: "dockerhub", url: "" ]) {
-        dockerImage.push(commitID())}
-
+        dockerImage.push(commitID())
+        
         if (env.BRANCH_NAME == 'develop') {
             dockerImage.push('develop')
         }
+        
+        }
+        
     }
 
-
 }
+
 
 def commitID() {
     sh 'git rev-parse HEAD > .git/commitID'
@@ -38,3 +41,14 @@ def commitID() {
     sh 'rm .git/commitID'
     commitID
 }
+
+// stage('Push image') {
+//     withCredentials([usernamePassword( credentialsId: 'docker-hub-credentials', usernameVariable: 'USER', passwordVariable: 'PASSWORD')]) {
+//         def registry_url = "registry.hub.docker.com/"
+//         bat "docker login -u $USER -p $PASSWORD ${registry_url}"
+//         docker.withRegistry("http://${registry_url}", "docker-hub-credentials") {
+//             // Push your image now
+//             bat "docker push username/foldername:build"
+//         }
+//     }
+// }
