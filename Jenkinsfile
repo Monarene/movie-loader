@@ -1,61 +1,45 @@
+def functionName = 'MoviesLoader'
 def imageName = 'mlabouardy/movies-loader'
-def myimageName = 'monarene/movie-loader'
-// Try finsing tests again
+def bucket = 'deployment-packages-watchlist'
+def region = 'eu-west-3'
 
-node(''){ 
-    
+node('workers'){
     try {
         stage('Checkout'){
-        checkout scm
-    }
-
-    stage('Unit Tests'){
-        def imageTest= docker.build("${imageName}-test", "-f Dockerfile.test .")
-        sh "docker run --rm -v $PWD/reports:/app/reports ${imageName}-test"
-        junit allowEmptyResults: true, testResults: "reports/*.xml"
-    
-    }
-
-    stage('Build'){
-        dockerImage = docker.build(myimageName)
-    }
-
-    stage('Push'){
-        withDockerRegistry([credentialsId: "dockerhub", url: "" ]) {
-        dockerImage.push(commitID())
-        
-        if (env.BRANCH_NAME == 'develop') {
-            dockerImage.push('develop')
+            checkout scm
+            notifySlack('STARTED')
         }
-        
-        }
-        
-    }
 
-    stage('Deploy'){
-            if(env.BRANCH_NAME == 'develop' || env.BRANCH_NAME == 'preprod'){
-                build job: "watchlist-deployment/${env.BRANCH_NAME}"
-            }
-
-            if(env.BRANCH_NAME == 'master'){
-                timeout(time: 2, unit: "HOURS") {
-                    input message: "Approve Deploy?", ok: "Yes"
-                }
-                build job: "watchlist-deployment/master"
+        stage('Unit Tests'){
+            def imageTest= docker.build("${imageName}-test", "-f Dockerfile.test .")
+            imageTest.inside{
+                sh "python test_index.py"
             }
         }
 
-    
-    } 
-    catch(e){
+        stage('Build'){
+            sh "zip -r ${commitID()}.zip index.py movies.json"
+        }
+
+        // stage('Push'){
+        //     sh "aws s3 cp ${commitID()}.zip s3://${bucket}/${functionName}/"
+        // }
+
+        // stage('Deploy'){
+        //     sh "aws lambda update-function-code --function-name ${functionName} \
+        //             --s3-bucket ${bucket} --s3-key ${functionName}/${commitID()}.zip \
+        //             --region ${region}"
+
+        //     sh "aws lambda publish-version --function-name ${functionName} \
+        //             --description ${commitID()} --region ${region}"
+        // }
+    } catch(e){
         currentBuild.result = 'FAILED'
         throw e
     } finally {
         notifySlack(currentBuild.result)
+        sh "rm ${commitID()}.zip"
     }
-
-    
-
 }
 
 def notifySlack(String buildStatus){
@@ -96,15 +80,3 @@ def commitMessage() {
     sh 'rm .git/commitMessage'
     commitMessage
 }
-
-// Example for pushing to docker
-// stage('Push image') {
-//     withCredentials([usernamePassword( credentialsId: 'docker-hub-credentials', usernameVariable: 'USER', passwordVariable: 'PASSWORD')]) {
-//         def registry_url = "registry.hub.docker.com/"
-//         bat "docker login -u $USER -p $PASSWORD ${registry_url}"
-//         docker.withRegistry("http://${registry_url}", "docker-hub-credentials") {
-//             // Push your image now
-//             bat "docker push username/foldername:build"
-//         }
-//     }
-// }

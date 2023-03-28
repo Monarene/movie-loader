@@ -2,7 +2,6 @@ import unittest
 import json
 import xmlrunner
 
-
 class TestJSONLoaderMethods(unittest.TestCase):
     movies = []
 
