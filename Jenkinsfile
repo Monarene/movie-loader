@@ -33,6 +33,7 @@ node('workers'){
         //     sh "aws lambda publish-version --function-name ${functionName} \
         //             --description ${commitID()} --region ${region}"
         // }
+        // testing the new PRS
     } catch(e){
         currentBuild.result = 'FAILED'
         throw e
