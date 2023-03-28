@@ -3,7 +3,7 @@ def imageName = 'mlabouardy/movies-loader'
 def bucket = 'deployment-packages-watchlist'
 def region = 'eu-west-3'
 
-node('workers'){
+node(''){
     try {
         stage('Checkout'){
             checkout scm
