@@ -1,7 +1,7 @@
 def functionName = 'MoviesLoader'
 def imageName = 'mlabouardy/movies-loader'
 def bucket = 'deployment-packages-watchlist'
-def region = 'eu-west-3'
+def region = 'us-east-2'
 
 node(''){
     try {
@@ -21,9 +21,9 @@ node(''){
             sh "zip -r ${commitID()}.zip index.py movies.json"
         }
 
-        // stage('Push'){
-        //     sh "aws s3 cp ${commitID()}.zip s3://${bucket}/${functionName}/"
-        // }
+        stage('Push'){
+            sh "aws s3 cp ${commitID()}.zip s3://${bucket}/${functionName}/"
+        }
 
         // stage('Deploy'){
         //     sh "aws lambda update-function-code --function-name ${functionName} \
