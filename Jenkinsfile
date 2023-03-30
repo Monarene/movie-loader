@@ -33,7 +33,7 @@ node(''){
         //     sh "aws lambda publish-version --function-name ${functionName} \
         //             --description ${commitID()} --region ${region}"
         // }
-        // Added the jenkins docker permissions
+        // restarted jenkins
     } catch(e){
         currentBuild.result = 'FAILED'
         throw e
