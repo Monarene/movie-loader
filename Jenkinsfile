@@ -25,15 +25,15 @@ node(''){
             sh "aws s3 cp ${commitID()}.zip s3://${bucket}/${functionName}/"
         }
 
-        // stage('Deploy'){
-        //     sh "aws lambda update-function-code --function-name ${functionName} \
-        //             --s3-bucket ${bucket} --s3-key ${functionName}/${commitID()}.zip \
-        //             --region ${region}"
+        stage('Deploy'){
+            sh "aws lambda update-function-code --function-name ${functionName} \
+                    --s3-bucket ${bucket} --s3-key ${functionName}/${commitID()}.zip \
+                    --region ${region}"
 
-        //     sh "aws lambda publish-version --function-name ${functionName} \
-        //             --description ${commitID()} --region ${region}"
-        // }
-        // restarted jenkins
+            sh "aws lambda publish-version --function-name ${functionName} \
+                    --description ${commitID()} --region ${region}"
+        }
+        restarted jenkins
     } catch(e){
         currentBuild.result = 'FAILED'
         throw e
