@@ -1,6 +1,6 @@
 def functionName = 'MoviesLoader'
 def imageName = 'mlabouardy/movies-loader'
-def bucket = 'deployment-packages-watchlist'
+def bucket = 'deployment-packages-watchlist-456'
 def region = 'us-east-2'
 
 node(''){
