@@ -3,6 +3,8 @@ def imageName = 'mlabouardy/movies-loader'
 def bucket = 'deployment-packages-watchlist-456'
 def region = 'us-east-2'
 
+// Build trigger
+
 node(''){
     try {
         stage('Checkout'){
